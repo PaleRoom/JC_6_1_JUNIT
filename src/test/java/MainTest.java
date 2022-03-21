@@ -10,17 +10,17 @@ import java.util.List;
 
 public class MainTest {
     GameProgress game1 = new GameProgress(100, 50, 42, 150);
-    final String savePath = "F://Games//savegames//";
-    final String savePathTest = "F://Games//savegames//Test//";
+    final String savePath = "src//test//";
+    final String testPath = "src//test//Test";
 
     @Test //Проверка на правильую запись в файл
     public void SaveGame_Test(){
         System.out.println("Тест на запись в файл");
         GameProgress expected = game1;
-        Main.saveGame(game1,savePathTest,"10.test");
-        GameProgress result = Main.loadGame(savePathTest + "10.test");//метод тестируется независимо
+        Main.saveGame(game1,testPath,"10.test");
+        GameProgress result = Main.loadGame(testPath + "10.test");//метод тестируется независимо
         List<String> savePathList1 = new ArrayList<>();
-        savePathList1.add(savePathTest + "10.test");
+        savePathList1.add(testPath + "10.test");
         Main.deleteFiles(savePathList1); //данный метод также тестируется независимо
 
         Assertions.assertEquals(expected.toString(),result.toString(),"SaveGame_Test failed");
@@ -42,19 +42,21 @@ public class MainTest {
 
     @Test//Проверка метода удаления файлов
     public void deleteFiles_Test() throws IOException {
+        File dir = new File (testPath);
+        if (dir.mkdir()) System.out.println("Каталог создан");
 
-        Files.createFile(Path.of(savePathTest+"1.temp"));
-        Files.createFile(Path.of(savePathTest+"2.temp"));
-        Files.createFile(Path.of(savePathTest+"3.temp"));
+        Files.createFile(Path.of(testPath+"1.temp"));
+        Files.createFile(Path.of(testPath+"2.temp"));
+        Files.createFile(Path.of(testPath+"3.temp"));
 
         List<String> savePathList = new ArrayList<>();
-        savePathList.add(savePathTest + "1.temp");
-        savePathList.add(savePathTest + "2.temp");
-        savePathList.add(savePathTest + "3.temp");
+        savePathList.add(testPath + "1.temp");
+        savePathList.add(testPath + "2.temp");
+        savePathList.add(testPath + "3.temp");
 
         System.out.println("Тест на удаление файла");
         Main.deleteFiles(savePathList);
-        File dirTest = new File(savePathTest);
+        File dirTest = new File(testPath);
 
         Assertions.assertTrue(isDirectoryEmpty(dirTest), "Delete_Test 2 failed ");
         System.out.println();
